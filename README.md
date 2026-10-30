@@ -1,18 +1,20 @@
-## Getting Started
+# Auth-Simulation-Lab (PHISHING 2000)
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Aplicação desenvolvida em **Java** para fins estritamente acadêmicos, criada no âmbito da disciplina de **Segurança e Auditoria de Sistemas**. O projeto consiste num laboratório de simulação controlada para demonstração de captura de credenciais via requisições HTTP em rede local, focado na análise de vulnerabilidades de autenticação e conscientização em cibersegurança.
 
-## Folder Structure
+---
 
-The workspace contains two folders by default, where:
+##  Tecnologias e Arquitetura
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+O projeto foi construído com foco em engenharia de software e programação orientada a objetos:
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+* **Linguagem:** Java (JDK 21)[span_0](start_span)[span_0](end_span)
+* **Interface Gráfica (GUI):** Java Swing, AWT e renderização baseada em múltiplas threads[span_1](start_span)[span_1](end_span).
+* **Redes e Comunicação:** `java.net.Socket`, servidores HTTP e deteção dinâmica de interfaces de rede (Wi-Fi/Ethernet) para mapeamento local[span_2](start_span)[span_2](end_span).
+* **Multimédia e Feedback:** `javax.sound.sampled` para gestão de áudio sincronizado e eventos de sistema[span_3](start_span)[span_3](end_span).
+* **Persistência:** Registo e persistência local de dados em ficheiros de texto (`.txt`).
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+---
 
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+##  Contexto Acadêmico
+Este software foi desenvolvido com objetivos puramente educacionais e de investigação para demonstrar na prática os riscos associados a ataques de engenharia social, a importância de protocolos de comunicação seguros (HTTPS) e a necessidade de auditorias rigorosas em redes corporativas.
