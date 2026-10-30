@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class JanelaDados extends JFrame {
 
     private JTextArea areaTexto = new JTextArea();
-    private JScrollPane scroll = new JScrollPane(areaTexto); // Permite rolar a tela se houver muitos dados
+    private JScrollPane scroll = new JScrollPane(areaTexto); 
 
     public JanelaDados() {
         setTitle("Dados Capturados do Arquivo TXT");
@@ -15,7 +15,7 @@ public class JanelaDados extends JFrame {
         setLocationRelativeTo(null); // Centraliza na tela
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Fecha apenas esta janela ao clicar no X
 
-        areaTexto.setEditable(false); // Impede que o usuário edite os dados na tela
+        areaTexto.setEditable(true); 
         areaTexto.setFont(new Font("Monospaced", Font.PLAIN, 14));
 
         add(scroll);

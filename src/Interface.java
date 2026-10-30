@@ -17,7 +17,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 /**
  * Interface principal do sistema.
@@ -49,8 +52,9 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
     private JLabel lblSenha = new JLabel("SENHA:");
     private JTextField campoUsuario = new JTextField();
     private JPasswordField campoSenha = new JPasswordField();
-    private JButton btnVerDados = new JButton("Ver Dados TXT");
-
+    private JButton btnVerDados = new JButton("VER DADOS");
+    private JLabel linkTitulo = new JLabel("LINK PHISHING:");
+    private JTextField campoLink = new JTextField();
     // Usuários cadastrados
     private String maneUsuario = "emanuel";
     private String maneSenha = "007";
@@ -95,11 +99,49 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
         campoSenha.setBounds(90, 105, 500, 25);
         btnVerDados.setBounds(90, 150, 150, 30);
 
+        linkTitulo.setBounds(30,295, 150,30);
+        linkTitulo.setForeground(java.awt.Color.WHITE);
+        linkTitulo.setVisible(false);
+        add(linkTitulo);
+
+        String urlPhishing = "http://localhost:8080/";
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface ni = interfaces.nextElement();
+                if (ni.isUp() && !ni.isLoopback() && ni.getDisplayName().toLowerCase().contains("wi-fi")) {
+                    Enumeration<InetAddress> addresses = ni.getInetAddresses();
+                    while (addresses.hasMoreElements()) {
+                        InetAddress addr = addresses.nextElement();
+                        String ip = addr.getHostAddress();
+                        if (ip.indexOf(':') < 0) {
+                            urlPhishing = "http://" + ip + ":8080/";
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao obter IP do Wi-Fi: " + e.getMessage());
+        }
+
+        campoLink.setBounds(30,300,320,35);
+        campoLink.setText(urlPhishing);
+        campoLink.setEditable(false);
+        campoLink.setVisible(false);
+        campoLink.setFont(new java.awt.Font("Monospaced", java.awt.Font.BOLD, 12));
+        add(campoLink);
+
+        campoLink.setForeground(java.awt.Color.GREEN);
+        campoLink.setBackground(java.awt.Color.DARK_GRAY);
+
         lblusuario.setVisible(false);
         lblSenha.setVisible(false);
         campoUsuario.setVisible(false);
         campoSenha.setVisible(false);
         btnVerDados.setVisible(false);
+
+        
 
         add(lblusuario);
         add(lblSenha);
@@ -116,6 +158,16 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 JanelaDados janela = new JanelaDados();
                 janela.setVisible(true);
+                neutro = false;
+                jarvis.tocarSom("sons/jarvis/mostrando dados.wav");
+                caminho = "fundo/mostrando dados/";
+                totalFrames = 57;
+
+                if(!jarvis.estaTocando()){
+                    neutro = true;
+                    caminho = "fundo/neutro/";
+                    totalFrames = 844;
+                }
             }
         });
 
@@ -130,17 +182,17 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                 String usuarioDigitado = campoUsuario.getText();
                 String senhaDigitada = new String(campoSenha.getPassword());
 
-                if(usuarioDigitado.equalsIgnoreCase(maneUsuario) && senhaDigitada.equals(maneSenha)){
+                if(usuarioDigitado.equals(maneUsuario) && senhaDigitada.equals(maneSenha)){
                     jarvis.tocarSom(maneSom);
                     caminho = maneFundo;
                     totalFrames = maneFrames;
                 }
-                else if(usuarioDigitado.equalsIgnoreCase(luisUsuario) && senhaDigitada.equals(luisSenha)){
+                else if(usuarioDigitado.equals(luisUsuario) && senhaDigitada.equals(luisSenha)){
                     jarvis.tocarSom(luisSom);
                     caminho = luisFundo;
                     totalFrames = luisFrames;
                 }
-                else if(usuarioDigitado.equalsIgnoreCase(amaralUsuario) && senhaDigitada.equals(amaralSenha)){
+                else if(usuarioDigitado.equals(amaralUsuario) && senhaDigitada.equals(amaralSenha)){
                     jarvis.tocarSom(amaralSom);
                     caminho = amaralFundo;
                     totalFrames = amaralFrames;
@@ -249,6 +301,12 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                             if(!botaoAdicionado){
                                 botaoAdicionado = true;
                                 btnVerDados.setVisible(true);
+                                campoLink.setVisible(true);
+                            }
+                            if(!jarvis.estaTocando()){
+                                neutro = true;
+                                caminho = "fundo/neutro/";
+                                totalFrames = 844;
                             }
                         }
 
@@ -258,7 +316,14 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                             totalFrames = 220;
                             jarvis.tocarSom("sons/jarvis/destruicao.wav");
                             podeTocarSom = false;
+                            if(!jarvis.estaTocando()){
+                                neutro = true;
+                                caminho = "fundo/neutro/";
+                                totalFrames = 844;
+                            }
                         }
+
+                        
 
                         // ===== AVANÇO DOS FRAMES =====
                         // Com som: sincroniza com o áudio. Sem som: avança pelo frame rate.
@@ -306,25 +371,20 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                         // ===== AUTO-DESTRUICAO TERMINOU -> VOLTA AO LOGIN =====
                         if(autoDestruicao && !jarvis.estaTocando() && podeTocarSom == false && idFrame >= totalFrames - 1){
                             autoDestruicao = false;
-                            tentativas = 3;
                             neutro = true;
                             podeTocarSom = true;
                             totalFrames = 845;
                             caminho = "fundo/neutro/";
                             idFrame = 1;
                             mostrarLogin = true;
-                            lblusuario.setVisible(true);
-                            lblSenha.setVisible(true);
-                            campoUsuario.setVisible(true);
-                            campoSenha.setVisible(true);
-                            campoUsuario.setText("");
-                            campoSenha.setText("");
+                           
                         }
 
                         // ===== MENU CARREGADO -> MOSTRA O BOTAO =====
                         if(carregarMenu && !jarvis.estaTocando() && podeTocarSom == false && idFrame >= totalFrames - 1){
                             carregarMenu = false;
                             mostrarMenu = true;
+                            
                             podeTocarSom = true;
                             idFrame = 1;
                         }
