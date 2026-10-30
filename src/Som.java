@@ -40,6 +40,7 @@ public class Som {
                     }
                 }
             });
+            
             clip.open(audioStream);
             clip.setFramePosition(0);
             clip.start();

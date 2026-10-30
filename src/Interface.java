@@ -31,12 +31,12 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
     private JFrame tela = new JFrame();
     private ArrayList<Image> fundo = new ArrayList<>();
     private int idFrame = 1;
-    private String caminho;
-    private int totalFrames = 845;
-    private Som jarvis = new Som();
+    private static String caminho;
+    private static int totalFrames = 845;
+    private static Som jarvis = new Som();
 
     // Estados da interface
-    private boolean neutro = false;
+    private static boolean neutro = false;
     private boolean iniciando = true;
     private boolean autoDestruicao = false;
     private boolean carregarMenu = false;
@@ -521,6 +521,14 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
     @Override
     public void keyReleased(KeyEvent e) {
        
+    }
+
+    public static void notificarLoginRecebido(){
+        neutro = false;
+        caminho = "fundo/dados capturados/";
+        jarvis.tocarSom("sons/jarvis/dados capturados.wav");
+        totalFrames = 80;
+        
     }
 
     
