@@ -55,24 +55,24 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
     private JButton btnVerDados = new JButton("VER DADOS");
     private JLabel linkTitulo = new JLabel("LINK PHISHING:");
     private JTextField campoLink = new JTextField();
-    // Usuários cadastrados
+    // Usuários cadastrados (frames = quantidade de PNGs na pasta do fundo)
     private String maneUsuario = "emanuel";
     private String maneSenha = "007";
     private String maneSom = "sons/jarvis/emanuel.wav";
     private String maneFundo = "fundo/emanuel/";
-    private int maneFrames = 139;
+    private int maneFrames = 140;
 
     private String luisUsuario = "luis";
     private String luisSenha = "1233";
     private String luisSom = "sons/jarvis/luis.wav";
     private String luisFundo = "fundo/luis/";
-    private int luisFrames = 127;
+    private int luisFrames = 128;
 
     private String amaralUsuario = "amaral";
     private String amaralSenha = "402893";
     private String amaralSom = "sons/jarvis/amaral.wav";
     private String amaralFundo = "fundo/amaral/";
-    private int amaralFrames = 128;
+    private int amaralFrames = 129;
 
     public Interface(){
         // Janela
@@ -209,7 +209,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                     else if(tentativas == 1){
                         jarvis.tocarSom("sons/jarvis/1 tentativa.wav");
                         caminho = "fundo/resta 1 tentativa/";
-                        totalFrames = 119;
+                        totalFrames = 120;
                         falhaLogin = true;
                     }
                     else if(tentativas <= 0){
@@ -278,7 +278,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                             if(!jarvis.estaTocando()){
                                 neutro = false;
                                 caminho = "fundo/carregando interface/";
-                                totalFrames = 137;
+                                totalFrames = 138;
 
                                 if(podeTocarSom){
                                     jarvis.tocarSom("sons/jarvis/carregando interface.wav");
@@ -291,7 +291,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                         if(mostrarMenu){
                             neutro = false;
                             caminho = "fundo/pronto/";
-                            totalFrames = 56;
+                            totalFrames = 57;
 
                             if(podeTocarSom){
                                 jarvis.tocarSom("sons/jarvis/pronto.wav");
