@@ -26,8 +26,6 @@ public class JanelaDados extends JFrame implements ActionListener{
         timer.start();
 
         JPanel painelFundo = new JPanel(){
-
-
             protected void paintComponent(Graphics g){
                 super.paintComponent(g);
                 if(imgFundo != null){

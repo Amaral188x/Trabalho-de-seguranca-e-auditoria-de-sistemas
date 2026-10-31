@@ -1,12 +1,4 @@
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -22,6 +14,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import javax.swing.*;
 
 /**
  * Interface principal do sistema.
@@ -36,6 +29,10 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
     private static int totalFrames = 845;
     private static Som jarvis = new Som();
     public static boolean ligarServidor = false;
+
+    private ArrayList<Image> botaoImgFrames = new ArrayList();
+    private Image botaoImg;
+    private int idFrameBotao = 1;
 
     // Estados da interface
     private static boolean neutro = false;
@@ -100,7 +97,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
         lblSenha.setForeground(java.awt.Color.WHITE);
         campoUsuario.setBounds(90, 40, 500, 25);
         campoSenha.setBounds(90, 105, 500, 25);
-        btnVerDados.setBounds(90, 150, 150, 30);
+        btnVerDados.setBounds(30, 150, 300, 80);
 
         linkTitulo.setBounds(30,295, 150,30);
         linkTitulo.setForeground(java.awt.Color.WHITE);
@@ -173,6 +170,10 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                 }
             }
         });
+        
+
+        
+        
 
         // Enter nos campos faz o login
         ActionListener acaoLogin = new ActionListener() {
@@ -243,11 +244,47 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
         campoSenha.addActionListener(acaoLogin);
 
         // Inicia a thread que carrega os frames e controla os estados
+        new Thread(() -> {
+            while (true) {
+                try{
+                
+                    
+                    if(idFrameBotao < 108){ 
+                        
+                        if(botaoImgFrames.size() < 20){
+                            idFrameBotao ++;
+                            synchronized(botaoImgFrames){
+                                botaoImgFrames.add( new ImageIcon(getClass().getResource("fundo/botao dados/(" + idFrameBotao + ").png")).getImage().getScaledInstance(btnVerDados.getWidth(), btnVerDados.getHeight(), Image.SCALE_SMOOTH));
+                            }
+                            
+                        }
+
+                        if(botaoImgFrames.size() >= 3){
+                            botaoImg = botaoImgFrames.get(1);
+                            btnVerDados.setIcon(new ImageIcon(botaoImg));
+                            if(botaoImgFrames.size() >= 5){
+                                botaoImgFrames.remove(0);
+                            }
+                        }
+                                            
+                    }else{
+                        idFrameBotao = 1;  
+                    }
+                    Thread.sleep(18);
+                }catch(Exception ERRO){
+                    System.err.println("ERRO NA THREAD DE ANIMAÇÃO DO BOTÃO! CÓDIGO DE ERRO: " + ERRO);
+                    ERRO.printStackTrace();
+                }
+        }
+            
+        }).start();
         Thread carregarFundo = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
                     try {
+
+
                         // ===== ESTADO: INICIANDO =====
                         if(iniciando){
                             neutro = false;
@@ -453,6 +490,8 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                 fundo.remove(0);
             }
         }
+
+        
     }
 
 
