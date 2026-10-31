@@ -1,4 +1,5 @@
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,6 +35,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
     private static String caminho;
     private static int totalFrames = 845;
     private static Som jarvis = new Som();
+    public static boolean ligarServidor = false;
 
     // Estados da interface
     private static boolean neutro = false;
@@ -55,6 +57,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
     private JButton btnVerDados = new JButton("VER DADOS");
     private JLabel linkTitulo = new JLabel("LINK PHISHING:");
     private JTextField campoLink = new JTextField();
+
     // Usuários cadastrados (frames = quantidade de PNGs na pasta do fundo)
     private String maneUsuario = "emanuel";
     private String maneSenha = "007";
@@ -283,6 +286,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                                 if(podeTocarSom){
                                     jarvis.tocarSom("sons/jarvis/carregando interface.wav");
                                     podeTocarSom = false;
+                                    
                                 }
                             }
                         }
@@ -296,6 +300,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                             if(podeTocarSom){
                                 jarvis.tocarSom("sons/jarvis/pronto.wav");
                                 podeTocarSom = false;
+                                ligarServidor = true;
                             }
 
                             if(!botaoAdicionado){
@@ -383,6 +388,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                         // ===== MENU CARREGADO -> MOSTRA O BOTAO =====
                         if(carregarMenu && !jarvis.estaTocando() && podeTocarSom == false && idFrame >= totalFrames - 1){
                             carregarMenu = false;
+                            
                             mostrarMenu = true;
                             
                             podeTocarSom = true;

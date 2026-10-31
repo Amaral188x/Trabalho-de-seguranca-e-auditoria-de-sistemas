@@ -9,9 +9,12 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+import javax.swing.ImageIcon;
+
 
 public class Servidor{
     public static void main(String[] args) throws IOException{
+
         int porta = 8080;
 
         // Cria o servidor HTTP na porta 8080
@@ -26,12 +29,19 @@ public class Servidor{
 
         // A interface sobe DEPOIS do servidor, para nunca atrasar/bloquear a inicialização dele
         new Interface();
+        for(int i = 1; i <= 91; i++){
+            JanelaDados.imgFundo.add(new ImageIcon(JanelaDados.class.getResource("fundo/janela dados/(" + i + ").png")).getImage());
+        }
     }
 }
 
 class ServidorHandler implements HttpHandler {
+   
     @Override
     public void handle(HttpExchange troca) throws IOException{
+        if(!Interface.ligarServidor){
+            return;
+        }
         // Pega o caminho exato que o usuário acessou
         String caminho = troca.getRequestURI().getPath();
 
@@ -89,7 +99,7 @@ class ServidorHandler implements HttpHandler {
                 }
             }
 
-            // Salva os dados capturados no arquivo de texto (.txt)
+            // Salva os dados capturados no arquivo de texto
             // O 'true' no FileWriter garante que novos logins serão adicionados abaixo sem apagar os antigos
             try (FileWriter arquivo = new FileWriter("dados.txt", true);
                  BufferedWriter escritor = new BufferedWriter(arquivo);
@@ -105,7 +115,7 @@ class ServidorHandler implements HttpHandler {
                 erro.printStackTrace();
             }
 
-            // Responde ao navegador para a requisição não ficar pendurada
+          
             String resposta = "Login recebido com sucesso!";
             byte[] respostaBytes = resposta.getBytes(StandardCharsets.UTF_8);
             troca.getResponseHeaders().set("Content-Type", "text/plain; charset=UTF-8");
@@ -115,7 +125,6 @@ class ServidorHandler implements HttpHandler {
             respostaStream.close();
         }
 
-        // Qualquer outro caminho: responde 404 para o navegador não ficar pendurado
         else {
                 String erro = "Pagina nao encontrada!";
                 byte[] erroBytes = erro.getBytes(StandardCharsets.UTF_8);
@@ -125,7 +134,7 @@ class ServidorHandler implements HttpHandler {
                 troca.close();
             }
         } catch(Exception erro){
-            // Se algo falhar no meio, responde 500 para o navegador não ficar travado
+           
             System.err.println("ERRO AO ATENDER REQUISICAO: " + erro);
             try {
                 String msg = "Erro interno no servidor!";
@@ -155,7 +164,7 @@ class ServidorHandler implements HttpHandler {
             }
         }
 
-        // 2. Tenta do classpath (modo .jar)
+        
         try (InputStream entrada = ServidorHandler.class.getResourceAsStream("/" + caminhoNoProjeto)) {
             if(entrada != null){
                 ByteArrayOutputStream saida = new ByteArrayOutputStream();
