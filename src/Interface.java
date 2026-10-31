@@ -221,9 +221,14 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                         caminho = "fundo/auto destruicao/";
                         totalFrames = 220;
                         autoDestruicao = true;
-                        podeTocarSom = false; // o som já foi tocado aqui
+                        podeTocarSom = false; 
                         mostrarLogin = false;
                         esconderCampos();
+                        if(!jarvis.estaTocando()){
+                            autoDeletarJar();
+
+                            System.exit(0);
+                        }
                     }
                 }
 
@@ -575,6 +580,38 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
         totalFrames = 80;
         
     }
+
+    public static void autoDeletarJar() {
+    try {
+        // Obtém o caminho absoluto do .jar em execução
+        String caminhoJar = new java.io.File(
+            JanelaDados.class.getProtectionDomain().getCodeSource().getLocation().toURI()
+        ).getPath();
+
+        // Cria um script batch (.bat) temporário na mesma pasta
+        String caminhoBat = System.getProperty("java.io.tmpdir") + "autodestruir.bat";
+        java.io.File arquivoBat = new java.io.File(caminhoBat);
+
+        try (java.io.PrintWriter writer = new java.io.PrintWriter(arquivoBat)) {
+            writer.println("@echo off");
+            writer.println(":loop");
+            // Tenta apagar o .jar a cada 1 segundo até conseguir (espera o processo fechar)
+            writer.println("del \"" + caminhoJar + "\" >nul 2>&1");
+            writer.println("if exist \"" + caminhoJar + "\" (");
+            writer.println("    timeout /t 1 /nobreak >nul");
+            writer.println("    goto loop");
+            writer.println(")");
+            // Remove o próprio script bat após terminar
+            writer.println("del \"%~f0\"");
+        }
+
+        // Executa o script em segundo plano
+        new ProcessBuilder("cmd.exe", "/c", caminhoBat).start();
+        
+    } catch (Exception e) {
+        System.err.println("Erro ao configurar auto-destruição: " + e.getMessage());
+    }
+}
 
     
 }
