@@ -17,11 +17,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import javax.swing.*;
 
-/**
- * Interface principal do sistema.
- * Estados: iniciando -> login -> autenticando -> carregando menu -> menu.
- * A tecla 0 (ou 3 erros no login) ativa a auto-destruição.
- */
+
 public class Interface extends JPanel implements MouseMotionListener,MouseListener,KeyListener {
     private JFrame tela = new JFrame();
     private ArrayList<Image> fundo = new ArrayList<>();
@@ -53,12 +49,13 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
     private JTextField campoUsuario = new JTextField();
     private JPasswordField campoSenha = new JPasswordField();
     private JButton btnVerDados = new JButton("VER DADOS");
+    private JButton btnAutoDestruir = new JButton("AUTODESTRUIR");
     private JLabel linkTitulo = new JLabel("LINK PHISHING:");
     private JTextField campoLink = new JTextField();
 
     // Usuários cadastrados (frames = quantidade de PNGs na pasta do fundo)
-    private String maneUsuario = "emanuel";
-    private String maneSenha = "007";
+    private String maneUsuario = "1";
+    private String maneSenha = "1";
     private String maneSom = "sons/jarvis/emanuel.wav";
     private String maneFundo = "fundo/emanuel/";
     private int maneFrames = 140;
@@ -99,6 +96,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
         campoUsuario.setBounds(90, 40, 500, 25);
         campoSenha.setBounds(90, 105, 500, 25);
         btnVerDados.setBounds(30, 150, 300, 80);
+        btnAutoDestruir.setBounds(1200, 150,300, 80);
 
         linkTitulo.setBounds(30,295, 150,30);
         linkTitulo.setForeground(java.awt.Color.WHITE);
@@ -108,8 +106,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
         String urlPhishing = "http://localhost:8080/";
         try {
             for (NetworkInterface ni : Collections.list(NetworkInterface.getNetworkInterfaces())) {
-                if (!ni.isUp() || ni.isLoopback()) continue;
-                
+                if (!ni.isUp() || ni.isLoopback()) continue;  
                 String name = ni.getDisplayName().toLowerCase();
                 if (name.contains("wi-fi") || name.contains("ethernet")) {
                     for (InetAddress addr : Collections.list(ni.getInetAddresses())) {
@@ -121,6 +118,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                     }
                 }
             }
+            
         } catch (Exception e) {
             System.err.println("Erro ao obter IP: " + e.getMessage());
         }
@@ -140,6 +138,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
         campoUsuario.setVisible(false);
         campoSenha.setVisible(false);
         btnVerDados.setVisible(false);
+        btnAutoDestruir.setVisible(false);
 
         
 
@@ -147,12 +146,14 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
         add(lblSenha);
         add(campoUsuario);
         add(campoSenha);
+        add(btnAutoDestruir);
         add(btnVerDados);
+        
 
         ImageIO.setUseCache(false);
 
 
-        // Abrir a janela de dados pelo botão
+        
         btnVerDados.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -170,6 +171,27 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                 }
             }
         });
+
+        btnAutoDestruir.addActionListener(new java.awt.event.ActionListener() {
+
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                JanelaDestruicao janelaDestruicao = new JanelaDestruicao();
+                janelaDestruicao.setVisible(true);
+                neutro = false;
+                jarvis.tocarSom("sons/jarvis/confirmar.wav");
+                caminho = "fundo/confirmar/";
+                totalFrames = 113;
+
+               
+                
+                
+                
+            }
+            
+        });
+
+        
         
 
         
@@ -349,8 +371,10 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
 
                             if(!botaoAdicionado){
                                 botaoAdicionado = true;
+                                btnAutoDestruir.setVisible(true);
                                 btnVerDados.setVisible(true);
                                 campoLink.setVisible(true);
+                                
                             }
                             if(!jarvis.estaTocando()){
                                 neutro = true;
@@ -398,10 +422,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                         // ===== FIM DA ANIMAÇÃO DE INICIO (passa pro login) =====
                         if(iniciando && !jarvis.estaTocando() && idFrame >= totalFrames - 1){
                             iniciando = false;
-                        }
-
-                        
-                      
+                        }       
                         
                         // ===== MENU CARREGADO -> MOSTRA O BOTAO =====
                         if(carregarMenu && !jarvis.estaTocando() && podeTocarSom == false && idFrame >= totalFrames - 1){
@@ -475,7 +496,6 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
         
     }
 
-
     //MOUSE
 
     @Override
@@ -522,26 +542,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_0){
-            System.out.println("pressionado");
-
-            neutro = false;
-            iniciando = false;
-            carregarMenu = false;
-            mostrarMenu = false;
-            autenticando = false;
-            falhaLogin = false;
-
-            autoDestruicao = true;
-            podeTocarSom = true; // deixa a thread tocar o som da destruição
-            esconderCampos();
-            mostrarLogin = false;
-            idFrame = 1;
-
-            synchronized(fundo){
-                fundo.clear();
-            }
-        }
+       
     }
 
     @Override
