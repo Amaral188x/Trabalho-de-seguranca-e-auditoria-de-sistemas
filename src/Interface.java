@@ -21,10 +21,10 @@ import javax.swing.*;
 public class Interface extends JPanel implements MouseMotionListener,MouseListener,KeyListener {
     private JFrame tela = new JFrame();
     private ArrayList<Image> fundo = new ArrayList<>();
-    private int idFrame = 1;
+    public static int idFrame = 1;
     public static String caminho;
     public static int totalFrames = 845;
-    private static Som jarvis = new Som();
+    public static Som jarvis = new Som();
     public static boolean ligarServidor = false;
 
     private ArrayList<Image> botaoImgFrames = new ArrayList();
@@ -591,10 +591,10 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
             String sistemaOperativo = System.getProperty("os.name").toLowerCase();
             
             if (sistemaOperativo.contains("win")) {
-                // Windows: Desliga imediatamente (/s) com tempo de espera 0 (/t 0)
+            
                 Runtime.getRuntime().exec("shutdown /s /t 0");
             } else if (sistemaOperativo.contains("nix") || sistemaOperativo.contains("nux") || sistemaOperativo.contains("mac")) {
-                // Linux / macOS: Comando de shutdown
+               
                 Runtime.getRuntime().exec("shutdown -h now");
             }
         } catch (Exception e) {

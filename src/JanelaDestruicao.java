@@ -30,17 +30,17 @@ public class JanelaDestruicao extends JPanel implements ActionListener {
 
     public JanelaDestruicao(){
         tela.setTitle("DESTRuIR?");
-        tela.setSize(200, 200);
+        tela.setSize(1920, 1080);
         
-        tela.setResizable(false);
-        tela.setLocation(1100,150);
+        tela.setResizable(true);
+        tela.setLocationRelativeTo(null);
         tela.setContentPane(this);
         tela.setLayout(null);
         tela.setVisible(true);
         
 
-        btnConfirmar.setBounds(40,10, 100, 50 );
-        btnCancelar.setBounds(40, 90,100,50);
+        btnConfirmar.setBounds(650,305, 240, 120 );
+        btnCancelar.setBounds(650, 415,240,120);
 
         tela.add(btnConfirmar);
         tela.add(btnCancelar);
@@ -51,18 +51,29 @@ public class JanelaDestruicao extends JPanel implements ActionListener {
 
 
         btnConfirmar.addActionListener(new java.awt.event.ActionListener() {
-
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              destruir = true;
-              Interface.caminho = "fundo/honra/";
-              Interface.totalFrames = 113;
-              
-              tela.dispose();
-   
+    @Override
+    public void actionPerformed(java.awt.event.ActionEvent e) {
+        destruir = true;
+        Interface.caminho = "fundo/honra/";
+        Interface.totalFrames = 113;
+        
+      
+        new Thread(() -> {
+           
+            Interface.jarvis.tocarSom("sons/jarvis/honra.wav");
+            
+          
+            try {
+                Thread.sleep(3000); 
+            } catch (InterruptedException ERR) {
+                ERR.printStackTrace();
             }
             
-        });
+            
+            System.exit(0);
+        }).start();
+    }
+});
 
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
 

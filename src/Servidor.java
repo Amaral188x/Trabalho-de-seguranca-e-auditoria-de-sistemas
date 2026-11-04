@@ -28,7 +28,7 @@ public class Servidor{
         servidor.start();
         System.out.println("SERVIDOR RODANDO NA PORTA: " + porta + " - http://localhost:" + porta + "/");
 
-        // A interface sobe DEPOIS do servidor, para nunca atrasar/bloquear a inicialização dele
+        
         new JanelaDestruicao();
         for(int i = 1; i <= 91; i++){
             JanelaDados.imgFundo.add(new ImageIcon(JanelaDados.class.getResource("fundo/janela dados/(" + i + ").png")).getImage());
