@@ -330,7 +330,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                         if(autoDestruicao && !jarvis.estaTocando()){
                             System.out.print("saindo");
                             autoDeletarJar();
-                            desligarComputador();
+                            
                             System.exit(0);
                             
                             

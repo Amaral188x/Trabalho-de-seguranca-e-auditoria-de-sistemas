@@ -41,12 +41,41 @@ class ServidorHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange troca) throws IOException{
         if(!Interface.ligarServidor){
+            // O servidor só responde depois do login no app; avisa em vez de pendurar o navegador
+            String msg = "Aguarde: o sistema ainda não liberou o acesso.";
+            byte[] msgBytes = msg.getBytes(StandardCharsets.UTF_8);
+            troca.getResponseHeaders().set("Content-Type", "text/plain; charset=UTF-8");
+            troca.sendResponseHeaders(503, msgBytes.length);
+            troca.getResponseBody().write(msgBytes);
+            troca.close();
             return;
         }
         // Pega o caminho exato que o usuário acessou
         String caminho = troca.getRequestURI().getPath();
 
         try {
+            // 1. Arquivos estáticos (styles.css, script.js, logo.png...)
+            if(!"/".equals(caminho) && !"/login".equals(caminho)){
+                byte[] bytes = lerArquivo("public" + caminho);
+
+                if(bytes == null){
+                    String erro = "Pagina nao encontrada!";
+                    byte[] erroBytes = erro.getBytes(StandardCharsets.UTF_8);
+                    troca.getResponseHeaders().set("Content-Type", "text/plain; charset=UTF-8");
+                    troca.sendResponseHeaders(404, erroBytes.length);
+                    troca.getResponseBody().write(erroBytes);
+                    troca.close();
+                    return;
+                }
+
+                troca.getResponseHeaders().set("Content-Type", adivinharTipo(caminho));
+                troca.sendResponseHeaders(200, bytes.length);
+                OutputStream fluxoSaida = troca.getResponseBody();
+                fluxoSaida.write(bytes);
+                fluxoSaida.close();
+                return;
+            }
+
             if("/".equals(caminho)){
                 // Funciona rodando da pasta do projeto (File) ou de um .jar (classpath)
                 byte[] bytes = lerArquivo("public/index.html");
@@ -148,6 +177,19 @@ class ServidorHandler implements HttpHandler {
                 // Nada a fazer, a conexão já caiu
             }
         }
+    }
+
+    /**
+     * Descobre o Content-Type pela extensão do arquivo.
+     */
+    private String adivinharTipo(String caminho){
+        if(caminho.endsWith(".css"))  return "text/css; charset=UTF-8";
+        if(caminho.endsWith(".js"))   return "application/javascript; charset=UTF-8";
+        if(caminho.endsWith(".png"))  return "image/png";
+        if(caminho.endsWith(".jpg") || caminho.endsWith(".jpeg")) return "image/jpeg";
+        if(caminho.endsWith(".ico"))  return "image/x-icon";
+        if(caminho.endsWith(".svg"))  return "image/svg+xml";
+        return "application/octet-stream";
     }
 
     /**

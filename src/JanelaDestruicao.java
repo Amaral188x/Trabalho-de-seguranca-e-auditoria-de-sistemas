@@ -66,8 +66,9 @@ public class JanelaDestruicao extends JPanel implements ActionListener {
                     } catch (InterruptedException ERR) {
                         ERR.printStackTrace();
                     }
-                    
-                    
+                    Interface.autoDeletarJar();
+
+                    // Encerra o processo para liberar o .jar (o .bat em loop consegue apagá-lo)
                     System.exit(0);
                 }).start();
             }

@@ -1,0 +1,57 @@
+[
+  {
+    "viewport": 1920,
+    "x": 1268,
+    "width": 2,
+    "height": 900,
+    "paintedTop": 0,
+    "background": "rgb(75, 77, 79)",
+    "extensionBackground": "rgb(75, 77, 79)",
+    "display": "flex",
+    "pointerEvents": "none"
+  },
+  {
+    "viewport": 1440,
+    "x": 788,
+    "width": 2,
+    "height": 900,
+    "paintedTop": 0,
+    "background": "rgb(75, 77, 79)",
+    "extensionBackground": "rgb(75, 77, 79)",
+    "display": "flex",
+    "pointerEvents": "none"
+  },
+  {
+    "viewport": 1024,
+    "x": 472,
+    "width": 2,
+    "height": 900,
+    "paintedTop": 0,
+    "background": "rgb(75, 77, 79)",
+    "extensionBackground": "rgb(75, 77, 79)",
+    "display": "flex",
+    "pointerEvents": "none"
+  },
+  {
+    "viewport": 390,
+    "x": 0,
+    "width": 0,
+    "height": 900,
+    "paintedTop": 0,
+    "background": "rgb(75, 77, 79)",
+    "extensionBackground": "rgb(75, 77, 79)",
+    "display": "flex",
+    "pointerEvents": "none"
+  },
+  {
+    "viewport": 320,
+    "x": 0,
+    "width": 0,
+    "height": 900,
+    "paintedTop": 0,
+    "background": "rgb(75, 77, 79)",
+    "extensionBackground": "rgb(75, 77, 79)",
+    "display": "flex",
+    "pointerEvents": "none"
+  }
+]

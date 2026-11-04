@@ -1,0 +1,52 @@
+[
+  {
+    "width": 1920,
+    "panelLeft": 1270,
+    "panelRight": 1920,
+    "paintedTop": 0,
+    "stripHeight": 18,
+    "background": "rgb(31, 31, 32)",
+    "panelBackground": "rgb(31, 31, 32)",
+    "pointerEvents": "none"
+  },
+  {
+    "width": 1440,
+    "panelLeft": 790,
+    "panelRight": 1440,
+    "paintedTop": 0,
+    "stripHeight": 18,
+    "background": "rgb(31, 31, 32)",
+    "panelBackground": "rgb(31, 31, 32)",
+    "pointerEvents": "none"
+  },
+  {
+    "width": 1024,
+    "panelLeft": 474,
+    "panelRight": 1024,
+    "paintedTop": 0,
+    "stripHeight": 18,
+    "background": "rgb(31, 31, 32)",
+    "panelBackground": "rgb(31, 31, 32)",
+    "pointerEvents": "none"
+  },
+  {
+    "width": 390,
+    "panelLeft": 0,
+    "panelRight": 550,
+    "paintedTop": 0,
+    "stripHeight": 18,
+    "background": "rgb(31, 31, 32)",
+    "panelBackground": "rgb(31, 31, 32)",
+    "pointerEvents": "none"
+  },
+  {
+    "width": 320,
+    "panelLeft": 0,
+    "panelRight": 550,
+    "paintedTop": 0,
+    "stripHeight": 18,
+    "background": "rgb(31, 31, 32)",
+    "panelBackground": "rgb(31, 31, 32)",
+    "pointerEvents": "none"
+  }
+]
