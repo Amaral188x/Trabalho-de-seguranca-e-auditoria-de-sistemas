@@ -36,7 +36,6 @@ public class JanelaDados extends JFrame implements ActionListener{
                 }
                 repaint();
             }
-
         };
         
 

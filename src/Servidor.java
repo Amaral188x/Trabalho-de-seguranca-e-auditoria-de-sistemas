@@ -18,6 +18,7 @@ public class Servidor{
         int porta = 8080;
 
         // Cria o servidor HTTP na porta 8080
+
         HttpServer servidor = HttpServer.create(new InetSocketAddress("0.0.0.0", porta), 0);
 
         // Mapeia a raiz ("/") para ser tratada pela nossa classe ServidorHandler
