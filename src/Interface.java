@@ -22,8 +22,8 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
     private JFrame tela = new JFrame();
     private ArrayList<Image> fundo = new ArrayList<>();
     private int idFrame = 1;
-    private static String caminho;
-    private static int totalFrames = 845;
+    public static String caminho;
+    public static int totalFrames = 845;
     private static Som jarvis = new Som();
     public static boolean ligarServidor = false;
 
@@ -181,12 +181,7 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                 neutro = false;
                 jarvis.tocarSom("sons/jarvis/confirmar.wav");
                 caminho = "fundo/confirmar/";
-                totalFrames = 113;
-
-               
-                
-                
-                
+                totalFrames = 113;     
             }
             
         });

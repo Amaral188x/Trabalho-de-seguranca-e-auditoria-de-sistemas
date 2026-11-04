@@ -19,8 +19,14 @@ public class JanelaDestruicao extends JPanel implements ActionListener {
     private int idFrameFundo = 1;
     private ArrayList<Image> fundoFrames = new ArrayList<>();
     private Image btnConfirmarImg;
+    private Image btnCancelarImg;
     private ArrayList<Image> btnConfirmarFrames = new ArrayList<>();
+     private ArrayList<Image> btnCancelarFrames = new ArrayList<>();
     private int btnConfirmarId = 1;
+    private int btnCancelarId = 1;
+
+    public boolean destruir = false;
+    public boolean cancelar = false;
 
     public JanelaDestruicao(){
         tela.setTitle("DESTRuIR?");
@@ -40,7 +46,34 @@ public class JanelaDestruicao extends JPanel implements ActionListener {
         tela.add(btnCancelar);
 
         btnConfirmar.setVisible(true);
+        
         btnCancelar.setVisible(true);
+
+
+        btnConfirmar.addActionListener(new java.awt.event.ActionListener() {
+
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+              destruir = true;
+              Interface.caminho = "fundo/honra/";
+              Interface.totalFrames = 113;
+              
+              tela.dispose();
+   
+            }
+            
+        });
+
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                cancelar = true;
+                tela.dispose();
+               
+            }
+            
+        });
 
         Timer timer = new Timer(18,this);
         timer.start();
@@ -59,8 +92,8 @@ public class JanelaDestruicao extends JPanel implements ActionListener {
                         }else{
                             idFrameFundo = 1;
                         }
-                        Thread.sleep(18);
                     }
+                    Thread.sleep(18);
                 }catch(Exception ERRO){
                     System.err.println("ERRO NA CLASSE JANELADESTRUICAO NA THREAD! CÓDIGO DE ERRO: " + ERRO);
                     ERRO.printStackTrace();
@@ -99,6 +132,27 @@ public class JanelaDestruicao extends JPanel implements ActionListener {
                     btnConfirmarFrames.remove(0);
                 }
             }
+
+
+            if(btnCancelarFrames.size() < 20){
+                if(btnCancelarId < 480){
+                    btnCancelarId ++;
+                    BufferedImage img = ImageIO.read(getClass().getResource("fundo/btn cancelar/(" + btnCancelarId + ").png"));
+                    btnCancelarFrames.add(img);
+                    btnCancelarImg = btnCancelarFrames.get(0);
+                }else{
+                    btnCancelarId = 1;
+                }
+            }
+
+            if(btnCancelarFrames.size() >= 3){
+                btnCancelar.setIcon(new ImageIcon(btnCancelarImg));
+                if(btnCancelarFrames.size() >= 5){
+                    btnCancelarFrames.remove(0);
+                }
+            }
+
+
         }catch(Exception ERR){
             System.err.println("ERRO NO SISTEMA DE ANIMAÇÃO DO BOTÃO DE CONFIRMAÇÃO NA CLASSE JANELADESTRUICAO! CÓDIGO DE ERRO: " + ERR);
             ERR.printStackTrace();
