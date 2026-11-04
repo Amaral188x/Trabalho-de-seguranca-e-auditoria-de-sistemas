@@ -31,6 +31,10 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
     private Image botaoImg;
     private int idFrameBotao = 1;
 
+    private ArrayList<Image> destruirImgFrames = new ArrayList();
+    private Image destruirImg;
+    private int idFrameDestrui = 1;
+
     // Estados da interface
     private static boolean neutro = false;
     private boolean iniciando = true;
@@ -286,6 +290,29 @@ public class Interface extends JPanel implements MouseMotionListener,MouseListen
                                             
                     }else{
                         idFrameBotao = 1;  
+                    }
+
+                    // ===== ANIMAÇÃO DO BOTÃO AUTODESTRUIR (fundo/btn destruir/) =====
+                    if(idFrameDestrui < 360){ 
+                        
+                        if(destruirImgFrames.size() < 20){
+                            idFrameDestrui ++;
+                            synchronized(destruirImgFrames){
+                                destruirImgFrames.add( new ImageIcon(getClass().getResource("fundo/btn destruir/(" + idFrameDestrui + ").png")).getImage());
+                            }
+                            
+                        }
+
+                        if(destruirImgFrames.size() >= 3){
+                            destruirImg = destruirImgFrames.get(1);
+                            btnAutoDestruir.setIcon(new ImageIcon(destruirImg));
+                            if(destruirImgFrames.size() >= 5){
+                                destruirImgFrames.remove(0);
+                            }
+                        }
+                                            
+                    }else{
+                        idFrameDestrui = 1;  
                     }
                     Thread.sleep(18);
                 }catch(Exception ERRO){

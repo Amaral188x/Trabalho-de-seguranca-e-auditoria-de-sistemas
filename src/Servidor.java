@@ -29,7 +29,7 @@ public class Servidor{
         System.out.println("SERVIDOR RODANDO NA PORTA: " + porta + " - http://localhost:" + porta + "/");
 
         
-        new JanelaDestruicao();
+        new Interface();
         for(int i = 1; i <= 91; i++){
             JanelaDados.imgFundo.add(new ImageIcon(JanelaDados.class.getResource("fundo/janela dados/(" + i + ").png")).getImage());
         }

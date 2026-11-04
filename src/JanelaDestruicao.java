@@ -37,6 +37,7 @@ public class JanelaDestruicao extends JPanel implements ActionListener {
         tela.setContentPane(this);
         tela.setLayout(null);
         tela.setVisible(true);
+        tela.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         
 
         btnConfirmar.setBounds(650,305, 240, 120 );
@@ -51,39 +52,47 @@ public class JanelaDestruicao extends JPanel implements ActionListener {
 
 
         btnConfirmar.addActionListener(new java.awt.event.ActionListener() {
-    @Override
-    public void actionPerformed(java.awt.event.ActionEvent e) {
-        destruir = true;
-        Interface.caminho = "fundo/honra/";
-        Interface.totalFrames = 113;
-        
-      
-        new Thread(() -> {
-           
-            Interface.jarvis.tocarSom("sons/jarvis/honra.wav");
-            
-          
-            try {
-                Thread.sleep(3000); 
-            } catch (InterruptedException ERR) {
-                ERR.printStackTrace();
-            }
-            
-            
-            System.exit(0);
-        }).start();
-    }
-});
-
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
-
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
-                cancelar = true;
-                tela.dispose();
-               
-            }
             
+            
+                new Thread(() -> {
+                
+                    Interface.jarvis.tocarSom("sons/jarvis/honra.wav");
+                    
+                
+                    try {
+                        Thread.sleep(3400); 
+                    } catch (InterruptedException ERR) {
+                        ERR.printStackTrace();
+                    }
+                    
+                    
+                    System.exit(0);
+                }).start();
+            }
+        });
+
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+            
+            
+                new Thread(() -> {
+                
+                    Interface.jarvis.tocarSom("sons/jarvis/abortando.wav");
+                    
+                
+                    try {
+                        Thread.sleep(2400); 
+                    } catch (InterruptedException ERR) {
+                        ERR.printStackTrace();
+                    }
+                    
+                    
+                    tela.dispose();
+                }).start();
+            }
         });
 
         Timer timer = new Timer(18,this);
@@ -94,7 +103,7 @@ public class JanelaDestruicao extends JPanel implements ActionListener {
             while(true){
                 try{
                     if(fundoFrames.size() < 20){
-                        if(idFrameFundo < 600){
+                        if(idFrameFundo < 598){
                             idFrameFundo ++;
                             BufferedImage img = ImageIO.read(getClass().getResource("fundo/confirmar fundo/(" + idFrameFundo + ").png"));
                             synchronized(fundoFrames){
@@ -106,7 +115,7 @@ public class JanelaDestruicao extends JPanel implements ActionListener {
                     }
                     Thread.sleep(18);
                 }catch(Exception ERRO){
-                    System.err.println("ERRO NA CLASSE JANELADESTRUICAO NA THREAD! CÓDIGO DE ERRO: " + ERRO);
+                    System.err.println("ERRO NA CLASSE JANELADESTRUICAO NA THREAD DE FRAMES DO FUNDO! CÓDIGO DE ERRO: " + ERRO);
                     ERRO.printStackTrace();
                 }
             }
